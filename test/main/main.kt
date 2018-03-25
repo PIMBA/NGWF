@@ -1,8 +1,10 @@
 package main
 
+import async.Messenger
 import ioc.BeanType
 import ioc.Beans
 import ioc.Injectable
+import javax.swing.MenuSelectionManager
 
 @Injectable(BeanType.Transient)
 class Test (val type1:Type1,val type2:Type2);
@@ -29,8 +31,10 @@ fun main (agrs: Array<String>) {
     val test1 = Beans.get<Type1>()
 
     if(test === test1) {
-        print("ok")
+        print("ok\n")
     };
+
+    Messenger.Default.send("Token", "registered message");
 }
 
 fun build(){
@@ -43,4 +47,8 @@ fun build(){
 //        .addSingleton<Type4>();
 
     Beans.registerBeans(Test::class, Type1::class, Type2::class, Type3::class, Type4::class)
+
+    Messenger.Default.register("Token", {
+        msg: String -> print(msg);
+    } );
 }
