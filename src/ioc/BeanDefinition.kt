@@ -14,7 +14,7 @@ public class BeanDefinition(defines: ConcurrentHashMap<KClass<out Any>, BeanDefi
             if (type !in dependencies) {
                 dependencies.add(type)
             } else {
-                throw UnregisteredBeanException("Unregistered Bean ${type.simpleName} has been injected");
+                throw UnregisteredBeanException("Unregistered Bean ${type.simpleName} has been injected")
             }
         }
     }

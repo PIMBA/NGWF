@@ -37,7 +37,7 @@ class DefaultBeanFactory : IBeanFactory {
     private fun <T : Any> createBean(c: KClass<T>, tempBeanMap: MutableMap<KClass<out Any>, Any> = mutableMapOf<KClass<out Any>, Any>()): T? {
         if (c !in defines.keys) return null
         if (c in singleBeans.keys)
-            return singleBeans[c]!! as T;
+            return singleBeans[c]!! as T
         // c.createInstance();
         val cons = c.primaryConstructor ?: return c.createInstance()
         val ps = cons.parameters

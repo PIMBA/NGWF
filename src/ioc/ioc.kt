@@ -43,24 +43,24 @@ object Beans {
      */
     fun registerBeans(vararg klasses: KClass<out Any>): Beans {
         klasses.forEach { klass ->
-            var found = false;
+            var found = false
             klass.annotations.forEach {
                 if (it is Injectable) {
-                    val injectable = it as Injectable;
+                    val injectable = it
                     when (injectable.type) {
                         BeanType.Transient -> this.beanFactory.addTransient(klass)
                         BeanType.Single -> this.beanFactory.addSingle(klass)
                     }
-                    found = true;
+                    found = true
                 }
             }
 
             if (!found) {
-                throw throw NoInjectableAnnotationException("No Annotation of Injectable for Bean ${klass.simpleName} registering");
+                throw throw NoInjectableAnnotationException("No Annotation of Injectable for Bean ${klass.simpleName} registering")
             }
         }
 
-        return this;
+        return this
     }
 
     /**

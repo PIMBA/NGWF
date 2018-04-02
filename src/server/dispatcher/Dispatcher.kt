@@ -1,9 +1,16 @@
 package server.dispatcher
 
-import java.net.Socket
+import server.http.HttpContext
+import server.http.HttpRequest
+import java.nio.channels.SelectionKey
 
 object Dispatcher {
-    fun commit(socket: Socket){
+    init {
+        
+    }
 
+
+    fun commit(requestHeader: String, selectionKey: SelectionKey){
+        val httpContext = HttpContext(requestHeader,selectionKey);
     }
 }
