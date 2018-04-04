@@ -78,4 +78,9 @@ object Beans {
         this.beanFactory.addTransient(T::class)
         return this
     }
+
+    inline fun <reified  T:Any> register(): Beans{
+        registerBeans(T::class);
+        return this;
+    }
 }

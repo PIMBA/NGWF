@@ -11,6 +11,6 @@ object Dispatcher {
 
 
     fun commit(requestHeader: String, selectionKey: SelectionKey){
-        val httpContext = HttpContext(requestHeader,selectionKey);
+        // val httpContext = HttpContext(requestHeader,selectionKey);
     }
 }
