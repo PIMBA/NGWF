@@ -1,5 +1,6 @@
 package server.http
 
+import common.Features
 import java.nio.channels.SelectionKey
 
 //class HttpContext(private val header:String, private val key: SelectionKey) {
@@ -8,5 +9,5 @@ import java.nio.channels.SelectionKey
 //}
 
 class HttpContext() {
-
+    val features : Features = Features();
 }

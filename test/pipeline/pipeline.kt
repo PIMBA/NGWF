@@ -5,7 +5,6 @@ import ioc.BeanType
 import ioc.Beans
 import ioc.annotation.Injectable
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import server.http.HttpContext
 import server.pipeline.RequestDelegate
@@ -21,15 +20,23 @@ open class MiddleBase(private val next: RequestDelegate){
 
 open class BeanBase(){
     init {
-        println(this::class.simpleName + "was built");
+        println(this::class.simpleName + " was built");
     }
 }
 
+@Injectable(BeanType.Single)
+class AnotherBean: BeanBase();
+
 @Injectable(BeanType.Transient)
-class BeanClass1: BeanBase();
+class BeanClass1(private val dep:AnotherBean) : BeanBase();
 
 @Injectable(BeanType.Single)
-class BeanClass2: BeanBase();
+class BeanClass2(private val dep:AnotherBean): BeanBase();
+
+class Middle1(next: RequestDelegate, private val bean1:BeanClass1) : MiddleBase(next);
+class Middle2(next: RequestDelegate, private val bean2:BeanClass2) : MiddleBase(next);
+class Middle3(next: RequestDelegate, private val bean1:BeanClass1) : MiddleBase(next);
+class Middle4(next: RequestDelegate, private val bean2:BeanClass2) : MiddleBase(next);
 
 class PiplineTest {
     var delegate : RequestDelegate? = null;
@@ -37,12 +44,8 @@ class PiplineTest {
     @Before
     fun before(){
         Beans.register<BeanClass1>()
-                .register<BeanClass2>();
-
-        class Middle1(next: RequestDelegate, private val bean1:BeanClass1) : MiddleBase(next);
-        class Middle2(next: RequestDelegate, private val bean2:BeanClass2) : MiddleBase(next);
-        class Middle3(next: RequestDelegate, private val bean1:BeanClass1) : MiddleBase(next);
-        class Middle4(next: RequestDelegate, private val bean2:BeanClass2) : MiddleBase(next);
+                .register<BeanClass2>()
+                .register<AnotherBean>();
 
         delegate = ApplicationBuilder.useMiddleware<Middle1>()
                 .useMiddleware<Middle2>()
@@ -54,7 +57,7 @@ class PiplineTest {
 
     @Test
     fun withIOC(){
-        for(i in Array<Int>(1000,{1})) {
+        for(i in Array<Int>(1,{1})) {
             delegate!!(HttpContext()); // in 1.5ms
         }
     }

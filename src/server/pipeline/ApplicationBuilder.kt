@@ -1,18 +1,15 @@
-import ioc.Beans
+import common.callNamed
 import server.http.HttpContext
 import server.pipeline.RequestDelegate
-import kotlin.reflect.*
-import kotlin.reflect.full.*
-
-fun <R> KFunction<R>.callNamed(params: Map<KParameter, Any>, self: Any? = null, extSelf: Any? = null): R {
-    val map = params.toMutableMap();
-    if (self != null) map += instanceParameter!! to self
-    if (extSelf != null) map += extensionReceiverParameter!! to extSelf
-    return callBy(map.toMap());
-}
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.functions
+import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.primaryConstructor
 
 object ApplicationBuilder{
-    const val INVOKE_NAME = "excute";
+    private const val INVOKE_NAME = "excute";
 
     private val components = mutableListOf<(next: RequestDelegate)-> RequestDelegate>();
     fun use(middleware: (next: RequestDelegate)-> RequestDelegate): ApplicationBuilder {
